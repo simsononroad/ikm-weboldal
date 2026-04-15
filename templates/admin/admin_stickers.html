@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4 fw-bold">Matricák Kezelése</h2>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white fw-bold">
+                {% if edit_sticker %} Matrica Szerkesztése {% else %} Új Matrica {% endif %}
+            </div>
+            <div class="card-body">
+                <form action="{% if edit_sticker %}/admin/stickers/update/{{ edit_sticker.id }}{% else %}/admin/stickers/add{% endif %}" 
+                      method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Név</label>
+                        <input type="text" class="form-control" name="name" 
+                               value="{% if edit_sticker %}{{ edit_sticker.name }}{% endif %}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Leírás</label>
+                        <input type="text" class="form-control" name="description" 
+                               value="{% if edit_sticker %}{{ edit_sticker.description }}{% endif %}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ár (Ft)</label>
+                        <input type="number" class="form-control" name="price" 
+                               value="{% if edit_sticker %}{{ edit_sticker.price }}{% endif %}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Kép (Kattints a feltöltéshez)</label>
+                        {% if edit_sticker %}
+                            <div class="mb-2">
+                                <img src="{{ url_for('static', filename='uploads/' + edit_sticker.image_filename) }}" 
+                                     class="img-thumbnail" style="height: 100px;">
+                            </div>
+                        {% endif %}
+                        <input type="file" class="form-control" name="image" {% if not edit_sticker %}required{% endif %}>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-success">
+                            {% if edit_sticker %} Mentés {% else %} Hozzáadás {% endif %}
+                        </button>
+                        {% if edit_sticker %}
+                            <a href="/admin/stickers" class="btn btn-outline-secondary">Mégse</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <table class="table table-hover table-striped mb-0">
+                    <thead><tr><th>Kép</th><th>Név</th><th>Ár</th><th>Műveletek</th></tr></thead>
+                    <tbody>
+                        {% for sticker in stickers %}
+                        <tr>
+                            <td><img src="{{ url_for('static', filename='uploads/' + sticker.image_filename) }}" style="height: 50px; border-radius: 5px;"></td>
+                            <td class="align-middle fw-bold">{{ sticker.name }}</td>
+                            <td class="align-middle">{{ sticker.price }} Ft</td>
+                            <td class="align-middle">
+                                <a href="/admin/stickers/edit/{{ sticker.id }}" class="btn btn-warning btn-sm">Szerkesztés</a>
+                                <a href="/admin/stickers/delete/{{ sticker.id }}" class="btn btn-danger btn-sm" 
+                                   onclick="return confirm('Törlöd?')">Törlés</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

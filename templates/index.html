@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="p-5 mb-5 bg-white border rounded-3 shadow-sm">
+    <div class="container-fluid py-2">
+        <h1 class="display-5 fw-bold text-dark">Illégális Kismotorosok (IKM)</h1>
+        <p class="col-md-10 fs-5 mt-3 text-secondary">
+            Célunk, hogy összefogjuk a kismotorosokat és egy pörgős, összetartó csapatot építsünk.
+            Támogasd a mozgalmat, és dobj a motorodra egy eredeti IKM matricát! <br>
+            <a href="https://www.instagram.com/illegalis_kismotorosok/" class="btn-outline-secondary btn">Tekints meg istagramon</a>
+        </p>
+    </div>
+</div>
+
+<h2 class="mb-4 fw-bold">Elérhető Matricák</h2>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for sticker in stickers %}
+    <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+            <img src="{{ url_for('static', filename='uploads/' + sticker.image_filename) }}" 
+                 class="card-img-top" alt="{{ sticker.name }}" style="height: 250px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">{{ sticker.name }}</h5>
+                <p class="card-text text-secondary">{{ sticker.description }}</p>
+            </div>
+            <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center pb-3 pt-0">
+                <span class="fs-5 fw-bold text-dark">{{ sticker.price }} Ft</span>
+                <button class="btn btn-outline-dark btn-sm btn-primary" onclick="copyToClipboard('{{ sticker.name }}', '{{ sticker.price }}')">Megvásárlom</button>
+                <button class="btn btn-outline-dark btn-sm btn-secondary" onclick="window.open('/order/{{ sticker.name }}/{{ sticker.description }}/{{ sticker.price }}')">Megvásárlom</button>
+
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12"><p class="text-muted">Nincs elérhető matrica.</p></div>
+    {% endfor %}
+</div>
+{% endblock %}

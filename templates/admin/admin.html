@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4 fw-bold">Matricák Kezelése (Admin)</h2>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white fw-bold">
+                Új matrica hozzáadása
+            </div>
+            <div class="card-body">
+                <form action="/admin/add" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Matrica Neve</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="pl. IKM Logo Classic" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Leírás</label>
+                        <textarea class="form-control" id="description" name="description" rows="2" placeholder="Méret, anyag, stb." required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Ár (Ft)</label>
+                        <input type="number" class="form-control" id="price" name="price" placeholder="pl. 1500" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image_url" class="form-label">Kép URL (link)</label>
+                        <input type="url" class="form-control" id="image_url" name="image_url" placeholder="https://..." required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Mentés az oldalra</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Név</th>
+                            <th>Ár</th>
+                            <th class="text-end">Művelet</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sticker in stickers %}
+                        <tr>
+                            <td class="align-middle">{{ sticker.id }}</td>
+                            <td class="align-middle fw-bold">{{ sticker.name }}</td>
+                            <td class="align-middle">{{ sticker.price }} Ft</td>
+                            <td class="text-end align-middle">
+                                <a href="/admin/delete/{{ sticker.id }}" class="btn btn-danger btn-sm" onclick="return confirm('Biztosan törlöd ezt a matricát?')">Törlés</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">Nincs még feltöltve matrica.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

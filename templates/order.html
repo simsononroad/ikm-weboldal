@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container rounded-3 bg-white">
+    <form class="row g-3" action="/send_order/{{ title }}/{{ desc }}/{{ price }}" method="POST">
+        <h3>Személyes adatok</h3>
+        <div class="col-md-2"></div>
+        <div class="col-md-4">
+            <label for="validationDefault02" class="form-label">Valódi név</label>
+            <input type="text" class="form-control" id="validationDefault02" value="" required name="irl_name">
+        </div>
+        
+        <div class="col-md-4">
+            <label for="validationDefaultUsername" class="form-label">Instagram név</label>
+            <div class="input-group">
+                <span class="input-group-text" id="inputGroupPrepend2">@</span>
+                <input type="text" class="form-control" id="validationDefaultUsername"
+                    aria-describedby="inputGroupPrepend2" name="ig_name">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="validationDefault02" class="form-label">Email cím</label>
+            <input type="text" class="form-control" id="validationDefault02" value="" required name="email">
+        </div>
+        <div class="col-md-6">
+            <label for="validationDefault03" class="form-label">Város</label>
+            <input type="text" class="form-control" id="validationDefault03" required name="city">
+        </div>
+
+
+
+        <hr>
+        <h3>Termék</h3>
+        <div class="row">
+            <div class="col-md-1">
+                <label for="validationDefault03" class="form-label">név</label>
+                <input type="text" class="form-control" id="validationDefault03" required disabled value="{{ title }}">
+            </div>
+            <div class="col-md-3">
+                <label for="validationDefault03" class="form-label">leírás</label>
+                <input type="text" class="form-control" id="validationDefault03" required disabled value="{{ desc}}">
+            </div>
+            <div class="col-md-1">
+                <label for="validationDefault03" class="form-label">ár</label>
+                <input type="text" class="form-control" id="validationDefault03" required disabled value="{{ price }}">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
+                <label class="form-check-label" for="invalidCheck2">
+                    Agree to terms and conditions
+                </label>
+            </div>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">Submit form</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
