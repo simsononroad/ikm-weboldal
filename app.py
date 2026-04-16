@@ -62,6 +62,7 @@ class Order(db.Model):
     prod_title = db.Column(db.String(120), nullable=False)
     prod_desc = db.Column(db.String(120), nullable=False)
     prod_price = db.Column(db.String(120), nullable=False)
+    is_ready = db.Column(db.String(2), nullable=False)
 
 
 
@@ -135,7 +136,7 @@ def send_order(title, desc, price):
         flash("Nem létezik ilyen matrica!")
         return redirect(f"/order/{title}/{desc}/{price}")
     
-    new_order = Order(irl_name=irl_name, ig_name=ig_name, email=email, city_name=city, prod_title=title, prod_desc=desc, prod_price=price)
+    new_order = Order(irl_name=irl_name, ig_name=ig_name, email=email, city_name=city, prod_title=title, prod_desc=desc, prod_price=price, is_ready=0)
     db.session.add(new_order)
     db.session.commit()
     flash("Rendelés sikeresen felvéve!")
@@ -181,12 +182,31 @@ def add_sticker():
 @app.route("/admin/orders")
 @login_required
 def admin_orders():
-    minden = db.session.execute(text("SELECT * FROM 'order'"))
-    heading = ("ID", "Valódi név", "Instagram név", "email", "Város név", "Áru neve", "Áru leírása", "Áru ára")
-    data = list(minden)
-    print(data)
+    nincs_kesz = db.session.execute(text("SELECT * FROM 'order' WHERE is_ready='0'"))
+    kesz = db.session.execute(text("SELECT * FROM 'order' WHERE is_ready='1'"))
+    heading = ("ID", "Valódi név", "Instagram név", "email", "Város név", "Áru neve", "Áru leírása", "Áru ára", "Műveletek")
+    nincs_kesz_data = list(nincs_kesz)
+    kesz_data = list(kesz)
     
-    return render_template("admin/orders.html", headings=heading, data=data)
+    return render_template("admin/orders.html", headings=heading, data_no_r=nincs_kesz_data, kesz_data=kesz_data)
+
+@app.route("/admin/del_order/<order_id>")
+@login_required
+def del_order(order_id):
+    db.session.execute(text(f"DELETE FROM 'order' WHERE id='{order_id}'"))
+    db.session.commit()
+    return redirect(url_for("admin_orders"))
+
+
+@app.route("/admin/to_ready/<order_id>")
+@login_required
+def to_ready(order_id):
+    db.session.execute(text(f"UPDATE 'order' SET is_ready='1' WHERE id='{order_id}'"))
+    db.session.commit()
+    return redirect(url_for("admin_orders"))
+
+
+
 
 # Matrica Szerkesztése (Renderelés)
 @app.route('/admin/stickers/edit/<int:id>')
