@@ -47,7 +47,7 @@
                 {% endfor %}
                 <td>
                     <a href="/admin/del_order/{{ row.id }}" class="btn btn-danger">Törlés</a>
-                    <a href="" class="btn btn-primary">Kiszállítva</a>
+                    <a href="/admin/to_nready/{{ row.id }}" class="btn btn-primary">Nincs kiszállítva</a>
                 </td>
             </tr>
             {% endfor %}

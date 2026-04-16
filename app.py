@@ -205,6 +205,13 @@ def to_ready(order_id):
     db.session.commit()
     return redirect(url_for("admin_orders"))
 
+@app.route("/admin/to_nready/<order_id>")
+@login_required
+def to_nready(order_id):
+    db.session.execute(text(f"UPDATE 'order' SET is_ready='0' WHERE id='{order_id}'"))
+    db.session.commit()
+    return redirect(url_for("admin_orders"))
+
 
 
 
